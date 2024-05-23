@@ -21,11 +21,11 @@ RETURNING *;
 DELETE FROM feeds
 WHERE id = $1;
 
--- name: GetNextFeedToFetch :many
+-- name: GetNextFeedsToFetch :many
 SELECT *
 FROM feeds
 ORDER BY last_fetched_at IS NULL DESC, last_fetched_at ASC
-LIMIT 10;
+LIMIT $1;
 
 -- name: MarkFeedAsFetched :one
 UPDATE feeds

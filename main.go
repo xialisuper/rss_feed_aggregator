@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+
 	// Load environment variables from.env file
 	godotenv.Load()
 	fmt.Println("Starting server...")
@@ -66,6 +67,9 @@ func main() {
 	mux.Handle("GET /v1/feed_follows", apiConfig.middlewareAuth(http.HandlerFunc(apiConfig.handleGetFeedFollows)))
 
 	fmt.Println("Server running on port ", port)
+
+	// start feed fetcher
+	go StartFeedFetcher(&apiConfig)
 
 	err = server.ListenAndServe()
 
