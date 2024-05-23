@@ -65,6 +65,10 @@ func main() {
 	// GET /v1/feed_follows
 
 	mux.Handle("GET /v1/feed_follows", apiConfig.middlewareAuth(http.HandlerFunc(apiConfig.handleGetFeedFollows)))
+	// GET /v1/posts with auth middleware
+	mux.Handle("GET /v1/posts", apiConfig.middlewareAuth(http.HandlerFunc(apiConfig.handleGetPostsByUserID)))
+
+
 
 	fmt.Println("Server running on port ", port)
 

@@ -1,7 +1,12 @@
--- name: CreatePost :one
+-- name: CreatePost :exec
 INSERT INTO posts (title, url, description, published_at, feed_id)
 VALUES ($1, $2, $3, $4, $5)
-RETURNING *;
+ON CONFLICT (url) DO UPDATE
+SET title = EXCLUDED.title,
+    description = EXCLUDED.description,
+    published_at = EXCLUDED.published_at,
+    feed_id = EXCLUDED.feed_id;
+
 
 -- name: GetPostsByUserID :many
 SELECT p.*
