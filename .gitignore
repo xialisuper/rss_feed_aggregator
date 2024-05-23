@@ -25,3 +25,5 @@ go.work
 __debug_bin*
 .env
 
+# ignore directory sh and files in it
+sh/
