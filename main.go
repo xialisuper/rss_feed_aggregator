@@ -46,6 +46,12 @@ func main() {
 	mux.HandleFunc("GET /v1/err", errorHandler)
 	// POST /v1/users
 	mux.HandleFunc("POST /v1/users", apiConfig.handleCreateUser)
+	// GET /v1/users
+	mux.HandleFunc("GET /v1/users", apiConfig.handleGetUsersByApiKey)
+	// GET /v1/users/{id}
+	// mux.HandleFunc("GET /v1/users/{id}", apiConfig.handleGetUser)
+	// PUT /v1/users
+	mux.HandleFunc("PUT /v1/users", apiConfig.handleUpdateUserByApiKey)
 
 	fmt.Println("Server running on port ", port)
 

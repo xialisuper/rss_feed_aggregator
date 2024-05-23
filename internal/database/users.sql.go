@@ -7,37 +7,74 @@ package database
 
 import (
 	"context"
-	"time"
 
 	"github.com/google/uuid"
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (id, created_at, updated_at, name)
-VALUES ($1, $2, $3, $4)
-RETURNING id, created_at, updated_at, name
+INSERT INTO users (id, name)
+VALUES ($1, $2)
+RETURNING id, created_at, updated_at, name, api_key
 `
 
 type CreateUserParams struct {
-	ID        uuid.UUID
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Name      string
+	ID   uuid.UUID
+	Name string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser,
-		arg.ID,
-		arg.CreatedAt,
-		arg.UpdatedAt,
-		arg.Name,
-	)
+	row := q.db.QueryRowContext(ctx, createUser, arg.ID, arg.Name)
 	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.Name,
+		&i.ApiKey,
+	)
+	return i, err
+}
+
+const getUserByApiKey = `-- name: GetUserByApiKey :one
+SELECT id, created_at, updated_at, name, api_key
+FROM users
+WHERE api_key = $1
+`
+
+func (q *Queries) GetUserByApiKey(ctx context.Context, apiKey string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByApiKey, apiKey)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.ApiKey,
+	)
+	return i, err
+}
+
+const updateUser = `-- name: UpdateUser :one
+UPDATE users 
+    SET name = $2 
+WHERE api_key = $1
+RETURNING id, created_at, updated_at, name, api_key
+`
+
+type UpdateUserParams struct {
+	ApiKey string
+	Name   string
+}
+
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, updateUser, arg.ApiKey, arg.Name)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.ApiKey,
 	)
 	return i, err
 }
