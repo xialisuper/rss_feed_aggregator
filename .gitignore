@@ -22,5 +22,6 @@ go.work
 
 
 .DS_Store
-__debug_bin1685735375
+__debug_bin*
 .env
+
