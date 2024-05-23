@@ -57,6 +57,11 @@ func main() {
 	mux.Handle("POST /v1/feeds", apiConfig.middlewareAuth(http.HandlerFunc(apiConfig.handleCreateFeed)))
 	// get all feeds without auth middleware
 	mux.Handle("GET /v1/feeds", http.HandlerFunc(apiConfig.handleGetFeeds))
+	// POST /v1/feed_follows with auth middleware
+	mux.Handle("POST /v1/feed_follows", apiConfig.middlewareAuth(http.HandlerFunc(apiConfig.handleCreateFeedFollow)))
+	// DELETE /v1/feed_follows/{feedFollowID} with auth middleware
+	mux.Handle("DELETE /v1/feed_follows/{feedFollowID}", apiConfig.middlewareAuth(http.HandlerFunc(apiConfig.handleDeleteFeedFollow)))
+
 
 
 	fmt.Println("Server running on port ", port)
