@@ -61,8 +61,9 @@ func main() {
 	mux.Handle("POST /v1/feed_follows", apiConfig.middlewareAuth(http.HandlerFunc(apiConfig.handleCreateFeedFollow)))
 	// DELETE /v1/feed_follows/{feedFollowID} with auth middleware
 	mux.Handle("DELETE /v1/feed_follows/{feedFollowID}", apiConfig.middlewareAuth(http.HandlerFunc(apiConfig.handleDeleteFeedFollow)))
+	// GET /v1/feed_follows
 
-
+	mux.Handle("GET /v1/feed_follows", apiConfig.middlewareAuth(http.HandlerFunc(apiConfig.handleGetFeedFollows)))
 
 	fmt.Println("Server running on port ", port)
 

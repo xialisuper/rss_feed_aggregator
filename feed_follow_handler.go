@@ -8,6 +8,19 @@ import (
 	"github.com/xialisuper/rss_feed_aggregator/internal/database"
 )
 
+// handleGetFeedFollows
+func (cfg *apiConfig) handleGetFeedFollows(w http.ResponseWriter, r *http.Request) {
+	user := r.Context().Value(userKey).(database.User)
+
+	follows, err := cfg.DB.GetFeedFollowsByUserID(r.Context(), user.ID)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, follows)
+}
+
 func (cfg *apiConfig) handleCreateFeedFollow(w http.ResponseWriter, r *http.Request) {
 	body := struct {
 		FeedID string `json:"feed_id"`

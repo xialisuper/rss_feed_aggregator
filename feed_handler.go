@@ -29,6 +29,17 @@ func (cfg *apiConfig) handleCreateFeed(w http.ResponseWriter, r *http.Request) {
 		Url:    body.URL,
 		UserID: user.ID,
 	})
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// create a new feed_follow in feed_follow table
+	_, err = cfg.DB.CreateFeedFollow(r.Context(), database.CreateFeedFollowParams{
+		FeedID: feed.ID,
+		UserID: user.ID,
+		ID:     uuid.New(),
+	})
 
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
