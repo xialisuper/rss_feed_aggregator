@@ -39,3 +39,16 @@ func (cfg *apiConfig) handleCreateFeed(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusCreated, feed)
 
 }
+
+// handleGetFeeds get all the feeds in the database order by updated time
+func (cfg *apiConfig) handleGetFeeds(w http.ResponseWriter, r *http.Request) {
+
+	feeds, err := cfg.DB.GetAllFeeds(r.Context())
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, feeds)
+
+}

@@ -55,6 +55,9 @@ func main() {
 
 	// POST /v1/feeds with auth middleware
 	mux.Handle("POST /v1/feeds", apiConfig.middlewareAuth(http.HandlerFunc(apiConfig.handleCreateFeed)))
+	// get all feeds without auth middleware
+	mux.Handle("GET /v1/feeds", http.HandlerFunc(apiConfig.handleGetFeeds))
+
 
 	fmt.Println("Server running on port ", port)
 
