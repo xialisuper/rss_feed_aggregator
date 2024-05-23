@@ -53,6 +53,9 @@ func main() {
 	// PUT /v1/users
 	mux.HandleFunc("PUT /v1/users", apiConfig.handleUpdateUserByApiKey)
 
+	// POST /v1/feeds with auth middleware
+	mux.Handle("POST /v1/feeds", apiConfig.middlewareAuth(http.HandlerFunc(apiConfig.handleCreateFeed)))
+
 	fmt.Println("Server running on port ", port)
 
 	err = server.ListenAndServe()
