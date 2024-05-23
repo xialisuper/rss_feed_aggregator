@@ -1,8 +1,8 @@
 -- +goose Up
 -- +goose StatementBegin
-SELECT 'up SQL query';
 ALTER TABLE feeds
-ADD COLUMN last_fetched_at time;
+ADD COLUMN last_fetched_at timestamptz;
+
 
 -- +goose StatementEnd
 

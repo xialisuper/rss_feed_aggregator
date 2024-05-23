@@ -20,3 +20,18 @@ RETURNING *;
 -- name: DeleteFeedById :exec
 DELETE FROM feeds
 WHERE id = $1;
+
+-- name: GetNextFeedToFetch :one
+SELECT *
+FROM feeds
+ORDER BY last_fetched_at IS NULL DESC, last_fetched_at ASC
+LIMIT 1;
+
+-- name: MarkFeedAsFetched :one
+UPDATE feeds
+SET last_fetched_at = CURRENT_TIMESTAMP,
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = $1
+RETURNING *;
+
+
